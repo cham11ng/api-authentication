@@ -13,6 +13,20 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->get(
+    '/user',
+    function (Request $request) {
+        return $request->user();
+    }
+);
+
+Route::get('books', function() {
+    return Parser::xml(file_get_contents(public_path('xml/books.xml')));
+});
+
+Route::get('topup', function() {
+    $top = file_get_contents(public_path('xml/books.xml'));
+    $xml = new SimpleXMLElement($top);
+    header('Content-Type: application/xml');
+    echo $xml->asXML();
 });
